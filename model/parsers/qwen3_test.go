@@ -7,7 +7,7 @@ import (
 )
 
 func TestQwen3ParserThinkingEnabled(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: true, defaultThinking: true}
+	parser := &Qwen3Parser{hasThinkingSupport: true}
 	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, calls, err := parser.Add("Let me think...</think>Answer.", true)
@@ -27,7 +27,7 @@ func TestQwen3ParserThinkingEnabled(t *testing.T) {
 }
 
 func TestQwen3ParserThinkingEnabledWithExplicitOpeningTag(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: true, defaultThinking: true}
+	parser := &Qwen3Parser{hasThinkingSupport: true}
 	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, calls, err := parser.Add("<think>\nLet me think...</think>Answer.", true)
@@ -47,7 +47,7 @@ func TestQwen3ParserThinkingEnabledWithExplicitOpeningTag(t *testing.T) {
 }
 
 func TestQwen3ParserThinkingEnabledWithSplitOpeningTag(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: true, defaultThinking: true}
+	parser := &Qwen3Parser{hasThinkingSupport: true}
 	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, calls, err := parser.Add("<thi", false)
@@ -74,7 +74,7 @@ func TestQwen3ParserThinkingEnabledWithSplitOpeningTag(t *testing.T) {
 }
 
 func TestQwen3ParserThinkingDisabled(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: false, defaultThinking: false}
+	parser := &Qwen3Parser{hasThinkingSupport: false}
 	parser.Init(nil, nil, &api.ThinkValue{Value: false})
 
 	content, thinking, calls, err := parser.Add("Direct answer", true)
@@ -94,7 +94,7 @@ func TestQwen3ParserThinkingDisabled(t *testing.T) {
 }
 
 func TestQwen3ParserNilThinkDefaultsToContentForInstructParser(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: false, defaultThinking: false}
+	parser := &Qwen3Parser{hasThinkingSupport: false}
 	parser.Init(nil, nil, nil)
 
 	content, thinking, calls, err := parser.Add("Direct answer", true)
@@ -114,7 +114,7 @@ func TestQwen3ParserNilThinkDefaultsToContentForInstructParser(t *testing.T) {
 }
 
 func TestQwen3ParserToolCall(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: false, defaultThinking: false}
+	parser := &Qwen3Parser{hasThinkingSupport: false}
 	parser.Init(nil, nil, &api.ThinkValue{Value: false})
 
 	input := "<tool_call>{\"name\":\"get_weather\",\"arguments\":{\"location\":\"San Francisco\",\"unit\":\"celsius\"}}</tool_call>"
@@ -147,7 +147,7 @@ func TestQwen3ParserToolCall(t *testing.T) {
 }
 
 func TestQwen3ParserThinkingWithToolCallBeforeThinkingClose(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: true, defaultThinking: true}
+	parser := &Qwen3Parser{hasThinkingSupport: true}
 	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	input := "Let me think<tool_call>{\"name\":\"get_weather\",\"arguments\":{\"location\":\"San Francisco\",\"unit\":\"celsius\"}}</tool_call>"
@@ -171,7 +171,7 @@ func TestQwen3ParserThinkingWithToolCallBeforeThinkingClose(t *testing.T) {
 }
 
 func TestQwen3ParserThinkingWithSplitToolOpenTag(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: true, defaultThinking: true}
+	parser := &Qwen3Parser{hasThinkingSupport: true}
 	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, calls, err := parser.Add("Let me think<tool_ca", false)
@@ -232,7 +232,7 @@ func TestQwen35ParserRespectsNoThink(t *testing.T) {
 }
 
 func TestQwen3ParserToolCallIndexing(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: false, defaultThinking: false}
+	parser := &Qwen3Parser{hasThinkingSupport: false}
 	parser.Init(nil, nil, &api.ThinkValue{Value: false})
 
 	input := `<tool_call>{"name":"first","arguments":{"a":"1"}}</tool_call>
@@ -259,7 +259,7 @@ func TestQwen3ParserToolCallIndexing(t *testing.T) {
 }
 
 func TestQwen3ParserToolCallIndexingStreaming(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: false, defaultThinking: false}
+	parser := &Qwen3Parser{hasThinkingSupport: false}
 	parser.Init(nil, nil, &api.ThinkValue{Value: false})
 
 	var all []api.ToolCall
@@ -292,7 +292,7 @@ func TestQwen3ParserToolCallIndexingStreaming(t *testing.T) {
 }
 
 func TestQwen3ParserToolCallIndexResetOnInit(t *testing.T) {
-	parser := &Qwen3Parser{hasThinkingSupport: false, defaultThinking: false}
+	parser := &Qwen3Parser{hasThinkingSupport: false}
 	parser.Init(nil, nil, &api.ThinkValue{Value: false})
 
 	_, _, _, err := parser.Add(`<tool_call>{"name":"first","arguments":{"a":"1"}}</tool_call>`, true)

@@ -48,9 +48,10 @@ func (p *Qwen3VLParser) PreservedTokens() []string {
 	}
 }
 
-func (p *Qwen3VLParser) setInitialState(lastMessage *api.Message) {
+func (p *Qwen3VLParser) setInitialState(lastMessage *api.Message, thinkValue *api.ThinkValue) {
 	prefill := lastMessage != nil && lastMessage.Role == "assistant"
-	if !p.HasThinkingSupport() {
+	thinkingEnabled := thinkValue != nil && thinkValue.Bool()
+	if !p.HasThinkingSupport() || !thinkingEnabled {
 		p.state = CollectingContent
 		return
 	}
@@ -66,7 +67,7 @@ func (p *Qwen3VLParser) setInitialState(lastMessage *api.Message) {
 func (p *Qwen3VLParser) Init(tools []api.Tool, lastMessage *api.Message, thinkValue *api.ThinkValue) []api.Tool {
 	p.tools = tools
 	p.callIndex = 0
-	p.setInitialState(lastMessage)
+	p.setInitialState(lastMessage, thinkValue)
 	return tools
 }
 

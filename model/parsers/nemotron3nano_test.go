@@ -286,11 +286,11 @@ func TestNemotron3NanoParser_Init(t *testing.T) {
 		}
 	})
 
-	t.Run("starts in thinking state when nil thinkValue", func(t *testing.T) {
+	t.Run("starts in content state when nil thinkValue", func(t *testing.T) {
 		p := &Nemotron3NanoParser{}
 		p.Init(nil, nil, nil)
-		if p.state != Nemotron3NanoCollectingThinking {
-			t.Errorf("expected state Nemotron3NanoCollectingThinking, got %v", p.state)
+		if p.state != Nemotron3NanoCollectingContent {
+			t.Errorf("expected state Nemotron3NanoCollectingContent, got %v", p.state)
 		}
 	})
 

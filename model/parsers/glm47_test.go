@@ -14,9 +14,9 @@ func TestGLM47ParserAdd(t *testing.T) {
 			"count":   {Type: api.PropertyType{"integer"}},
 			"enabled": {Type: api.PropertyType{"boolean"}},
 		}),
-	}, nil, nil)
+	}, nil, &api.ThinkValue{Value: true})
 
-	// When thinking is enabled (thinkValue nil), the prompt ends with <think>,
+	// When thinking is enabled, the prompt ends with <think>,
 	// so the model output does NOT include the opening <think> tag.
 	content, thinking, calls, err := parser.Add("plan</think>Answer<tool_call>calculate<arg_key>count</arg_key><arg_value>3</arg_value><arg_key>enabled</arg_key><arg_value>true</arg_value></tool_call>", true)
 	if err != nil {
@@ -39,7 +39,7 @@ func TestGLM47ParserAdd(t *testing.T) {
 
 func TestGLM47ParserNoThinkingContent(t *testing.T) {
 	parser := GLM47Parser{}
-	parser.Init(nil, nil, nil)
+	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	// When thinking is enabled but model has no thinking to output,
 	// it should output </think> immediately followed by content.
@@ -100,7 +100,7 @@ func TestGLM47ParserToolCallEscaping(t *testing.T) {
 
 func TestGLM47ParserToolCallIndexing(t *testing.T) {
 	parser := GLM47Parser{}
-	parser.Init(nil, nil, nil)
+	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	input := `plan</think>
 <tool_call>first<arg_key>a</arg_key><arg_value>1</arg_value></tool_call>
@@ -129,7 +129,7 @@ func TestGLM47ParserToolCallIndexing(t *testing.T) {
 
 func TestGLM47ParserToolCallIndexingStreaming(t *testing.T) {
 	parser := GLM47Parser{}
-	parser.Init(nil, nil, nil)
+	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	var all []api.ToolCall
 
@@ -162,14 +162,14 @@ func TestGLM47ParserToolCallIndexingStreaming(t *testing.T) {
 
 func TestGLM47ParserToolCallIndexResetOnInit(t *testing.T) {
 	parser := GLM47Parser{}
-	parser.Init(nil, nil, nil)
+	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	_, _, _, err := parser.Add("plan</think><tool_call>first<arg_key>a</arg_key><arg_value>1</arg_value></tool_call>", true)
 	if err != nil {
 		t.Fatalf("first parse failed: %v", err)
 	}
 
-	parser.Init(nil, nil, nil)
+	parser.Init(nil, nil, &api.ThinkValue{Value: true})
 	_, _, calls, err := parser.Add("plan</think><tool_call>second<arg_key>b</arg_key><arg_value>2</arg_value></tool_call>", true)
 	if err != nil {
 		t.Fatalf("second parse failed: %v", err)

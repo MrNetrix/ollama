@@ -827,14 +827,10 @@ func (s *Server) chat(w http.ResponseWriter, r *http.Request) error {
 		s.log().Error("failed to show model details", "error", err, "model", req.Model)
 		return nil
 	}
-	think := slices.Contains(details.Capabilities, model.CapabilityThinking)
-
 	var thinkValue any
 
 	if req.Think != nil {
 		thinkValue = req.Think
-	} else {
-		thinkValue = think
 	}
 
 	// Check if the last user message has attachments

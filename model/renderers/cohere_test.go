@@ -24,7 +24,7 @@ func TestCohereRenderUserOnly(t *testing.T) {
 
 	want := cohereSystemTurnNoTools +
 		"<|START_OF_TURN_TOKEN|><|USER_TOKEN|><|START_TEXT|>USERMSG<|END_TEXT|><|END_OF_TURN_TOKEN|>" +
-		"<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|><|START_THINKING|>"
+		"<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|><|START_THINKING|><|END_THINKING|>"
 	if got != want {
 		t.Errorf("render mismatch:\ngot:  %q\nwant: %q", got, want)
 	}
@@ -48,7 +48,7 @@ func TestCohereRenderSystemHistoryAndThinking(t *testing.T) {
 		"<|START_OF_TURN_TOKEN|><|USER_TOKEN|><|START_TEXT|>Q1<|END_TEXT|><|END_OF_TURN_TOKEN|>" +
 		"<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|><|START_THINKING|>THINK1<|END_THINKING|><|START_TEXT|>A1<|END_TEXT|><|END_OF_TURN_TOKEN|>" +
 		"<|START_OF_TURN_TOKEN|><|USER_TOKEN|><|START_TEXT|>Q2<|END_TEXT|><|END_OF_TURN_TOKEN|>" +
-		"<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|><|START_THINKING|>"
+		"<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|><|START_THINKING|><|END_THINKING|>"
 	if got != want {
 		t.Errorf("render mismatch:\ngot:  %q\nwant: %q", got, want)
 	}

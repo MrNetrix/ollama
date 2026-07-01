@@ -85,10 +85,7 @@ func splitQwen35ReasoningContent(content, messageThinking string, isThinking boo
 func (r *Qwen35Renderer) Render(messages []api.Message, tools []api.Tool, think *api.ThinkValue) (string, error) {
 	var sb strings.Builder
 
-	isThinking := r.isThinking
-	if think != nil {
-		isThinking = think.Bool()
-	}
+	isThinking := think != nil && think.Bool()
 
 	if len(tools) > 0 {
 		sb.WriteString(imStartTag + "system\n")

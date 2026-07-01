@@ -156,11 +156,11 @@ Reminder:
 		expected string
 	}{
 		{
-			name: "no system default thinking on",
+			name: "no system default thinking off",
 			messages: []api.Message{
 				{Role: "user", Content: "Hello"},
 			},
-			expected: "\n\n\n<|im_start|>system\n<|im_end|>\n\n<|im_start|>user\nHello<|im_end|>\n\n<|im_start|>assistant\n<think>\n",
+			expected: "\n\n\n<|im_start|>system\n<|im_end|>\n\n<|im_start|>user\nHello<|im_end|>\n\n<|im_start|>assistant\n<think></think>",
 		},
 		{
 			name: "no system explicit thinking off",

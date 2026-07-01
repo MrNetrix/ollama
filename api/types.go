@@ -104,8 +104,7 @@ type GenerateRequest struct {
 	// Think controls whether thinking/reasoning models will think before
 	// responding. Can be a boolean (true/false) or a string ("high", "medium", "low")
 	// for supported models. Needs to be a pointer so we can distinguish between false
-	// (request that thinking _not_ be used) and unset (use the old behavior
-	// before this option was introduced)
+	// (request that thinking _not_ be used) and unset (use the default behavior).
 	Think *ThinkValue `json:"think,omitempty"`
 
 	// Truncate is a boolean that, when set to true, truncates the chat history messages

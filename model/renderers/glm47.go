@@ -32,7 +32,7 @@ import (
 //     - enable_thinking=false: outputs </think> to skip reasoning
 //
 // OLLAMA DEFAULTS:
-//   - Thinking is ENABLED by default (thinkValue=nil or true outputs <think>)
+//   - Thinking is DISABLED by default (only thinkValue=true outputs <think>)
 //   - Thinking is PRESERVED by default (reasoning content from previous turns is always
 //     included in <think>...</think> blocks, equivalent to clear_thinking=false)
 //   - Users can disable thinking per-turn via thinkValue=false
@@ -63,10 +63,7 @@ func (r *GLM47Renderer) Render(messages []api.Message, tools []api.Tool, thinkVa
 		sb.WriteString("<tool_call>{function-name}<arg_key>{arg-key-1}</arg_key><arg_value>{arg-value-1}</arg_value><arg_key>{arg-key-2}</arg_key><arg_value>{arg-value-2}</arg_value>...</tool_call>")
 	}
 
-	think := true
-	if thinkValue != nil && !thinkValue.Bool() {
-		think = false
-	}
+	think := thinkValue != nil && thinkValue.Bool()
 
 	for i, message := range messages {
 		switch message.Role {

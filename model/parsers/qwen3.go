@@ -40,7 +40,6 @@ type Qwen3Parser struct {
 	tools                  []api.Tool
 	callIndex              int
 	hasThinkingSupport     bool
-	defaultThinking        bool
 	maybeThinkingOpenAtBOL bool
 }
 
@@ -67,9 +66,6 @@ func (p *Qwen3Parser) Init(tools []api.Tool, lastMessage *api.Message, thinkValu
 	p.callIndex = 0
 
 	thinkingEnabled := thinkValue != nil && thinkValue.Bool()
-	if thinkValue == nil {
-		thinkingEnabled = p.defaultThinking
-	}
 
 	if p.hasThinkingSupport && thinkingEnabled {
 		p.state = qwen3ParserStateCollectingThinking

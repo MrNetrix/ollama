@@ -48,7 +48,7 @@ func (p *Nemotron3NanoParser) Init(tools []api.Tool, lastMessage *api.Message, t
 	p.maybeThinkingOpenAtBOL = false
 	p.skipThinkingLeadingWS = false
 
-	thinkingEnabled := thinkValue == nil || thinkValue.Bool()
+	thinkingEnabled := thinkValue != nil && thinkValue.Bool()
 	prefill := lastMessage != nil && lastMessage.Role == "assistant"
 
 	if !thinkingEnabled || (prefill && lastMessage.Content != "") {

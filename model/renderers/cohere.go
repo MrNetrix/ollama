@@ -91,9 +91,7 @@ func writeToolResult(sb *strings.Builder, callID string, content string) error {
 func (r *CohereRenderer) Render(messages []api.Message, tools []api.Tool, think *api.ThinkValue) (string, error) {
 	var sb strings.Builder
 
-	// The template defaults reasoning to true; an explicit think=false
-	// disables it.
-	reasoning := think == nil || think.Bool()
+	reasoning := think != nil && think.Bool()
 
 	// The first system message — the request's system prompt, or the model's
 	// Modelfile SYSTEM when the request has none — fills the template's

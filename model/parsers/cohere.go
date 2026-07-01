@@ -67,8 +67,7 @@ func (p *CohereParser) Init(tools []api.Tool, lastMessage *api.Message, thinkVal
 	p.buffer.Reset()
 	p.callIndex = 0
 
-	// The template enables reasoning by default; nil means default.
-	thinkingEnabled := thinkValue == nil || thinkValue.Bool()
+	thinkingEnabled := thinkValue != nil && thinkValue.Bool()
 
 	assistantPrefill := lastMessage != nil && lastMessage.Role == "assistant" && lastMessage.Content != ""
 	switch {

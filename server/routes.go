@@ -465,9 +465,6 @@ func (s *Server) GenerateHandler(c *gin.Context) {
 	modelCaps := m.Capabilities()
 	if slices.Contains(modelCaps, model.CapabilityThinking) {
 		caps = append(caps, model.CapabilityThinking)
-		if req.Think == nil {
-			req.Think = &api.ThinkValue{Value: true}
-		}
 	} else {
 		if req.Think != nil && req.Think.Bool() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("%q does not support thinking", req.Model)})
@@ -2639,9 +2636,6 @@ func (s *Server) ChatHandler(c *gin.Context) {
 	modelCaps := m.Capabilities()
 	if slices.Contains(modelCaps, model.CapabilityThinking) {
 		caps = append(caps, model.CapabilityThinking)
-		if req.Think == nil {
-			req.Think = &api.ThinkValue{Value: true}
-		}
 	} else {
 		if req.Think != nil && req.Think.Bool() {
 			// Set think to nil when being used with Anthropic API to connect to tools like claude code

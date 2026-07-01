@@ -281,7 +281,7 @@ func nemotron3NanoRenderContent(content any) string {
 }
 
 func (r *Nemotron3NanoRenderer) resolveThinking(messages []api.Message, thinkValue *api.ThinkValue) bool {
-	enableThinking := thinkValue == nil || thinkValue.Bool()
+	enableThinking := thinkValue != nil && thinkValue.Bool()
 	for _, message := range messages {
 		if message.Role != "user" && message.Role != "system" {
 			continue

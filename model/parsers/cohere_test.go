@@ -26,7 +26,7 @@ func cohereAddAll(t *testing.T, p *CohereParser, chunks []string) (content, thin
 
 func TestCohereParseThinkingThenText(t *testing.T) {
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, calls := cohereAddAll(t, p, []string{
 		"Let me think", " about this.<|END_THINKING|>",
@@ -45,7 +45,7 @@ func TestCohereParseThinkingThenText(t *testing.T) {
 
 func TestCohereParseSplitTags(t *testing.T) {
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	// Tags split across chunk boundaries must not leak into output.
 	content, thinking, _ := cohereAddAll(t, p, []string{
@@ -61,7 +61,7 @@ func TestCohereParseSplitTags(t *testing.T) {
 
 func TestCohereParseToolCall(t *testing.T) {
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, calls := cohereAddAll(t, p, []string{
 		"plan<|END_THINKING|><|START_ACTION|>[\n",
@@ -109,7 +109,7 @@ func TestCohereParseBareContent(t *testing.T) {
 	// Models occasionally skip the START_TEXT wrapper; treat raw text after
 	// thinking as content.
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, thinking, _ := cohereAddAll(t, p, []string{
 		"thought<|END_THINKING|>", "Just plain text", " output",
@@ -124,7 +124,7 @@ func TestCohereParseBareContent(t *testing.T) {
 
 func TestCohereParseEndOfTurnWithoutEndText(t *testing.T) {
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 
 	content, _, _ := cohereAddAll(t, p, []string{
 		"t<|END_THINKING|><|START_TEXT|>answer<|END_OF_TURN_TOKEN|>",
@@ -162,7 +162,7 @@ func TestCohereParseMalformedActions(t *testing.T) {
 	// One malformed call (unquoted value) must not drop its well-formed
 	// sibling, and a missing comma between calls must not drop either.
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 	_, _, calls := cohereAddAll(t, p, []string{
 		"plan<|END_THINKING|><|START_ACTION|>[\n",
 		`    {"tool_call_id": "0", "tool_name": "set_alarm", "parameters": {"time": 15:30}},`,
@@ -174,7 +174,7 @@ func TestCohereParseMalformedActions(t *testing.T) {
 	}
 
 	p = &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 	_, _, calls = cohereAddAll(t, p, []string{
 		`<|END_THINKING|><|START_ACTION|>[`,
 		`{"tool_call_id": "0", "tool_name": "a", "parameters": {}}`,
@@ -190,7 +190,7 @@ func TestCohereParseMalformedActions(t *testing.T) {
 
 	// Unparseable garbage yields no calls and no panic.
 	p = &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 	_, _, calls = cohereAddAll(t, p, []string{"x<|END_THINKING|><|START_ACTION|>[!!!]<|END_ACTION|>"})
 	if len(calls) != 0 {
 		t.Fatalf("calls = %v, want none", calls)
@@ -201,7 +201,7 @@ func TestCohereParseLegacyResponseMarkers(t *testing.T) {
 	// Models trained on the older Command A template sometimes emit
 	// <|START_RESPONSE|>/<|END_RESPONSE|> instead of START_TEXT/END_TEXT.
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 	content, thinking, _ := cohereAddAll(t, p, []string{
 		"plan<|END_THINKING|>", "<|START_RESPONSE|>Hello", " there<|END_RESPONSE|>",
 	})
@@ -228,7 +228,7 @@ func TestCohereParseStreamsBeforeDone(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			p := &CohereParser{}
-			p.Init(nil, nil, nil)
+			p.Init(nil, nil, &api.ThinkValue{Value: true})
 			if _, _, _, err := p.Add("x<|END_THINKING|>", false); err != nil {
 				t.Fatal(err)
 			}
@@ -246,7 +246,7 @@ func TestCohereParseStreamsBeforeDone(t *testing.T) {
 func TestCohereParseEndOfTurnBetweenBlocks(t *testing.T) {
 	// A literal end-of-turn marker between blocks is consumed, not shown.
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 	content, thinking, _ := cohereAddAll(t, p, []string{
 		"t<|END_THINKING|><|START_TEXT|>hi<|END_TEXT|><|END_OF_TURN_TOKEN|>",
 	})
@@ -258,7 +258,7 @@ func TestCohereParseEndOfTurnBetweenBlocks(t *testing.T) {
 func TestCohereParseBareContentBeforeEndOfTurn(t *testing.T) {
 	// Bare content followed by an end-of-turn marker keeps the content.
 	p := &CohereParser{}
-	p.Init(nil, nil, nil)
+	p.Init(nil, nil, &api.ThinkValue{Value: true})
 	content, _, _ := cohereAddAll(t, p, []string{
 		"t<|END_THINKING|>plain answer<|END_OF_TURN_TOKEN|>",
 	})

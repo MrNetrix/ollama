@@ -126,7 +126,7 @@ func TestQwen35RendererBackToBackToolCallsAndResponses(t *testing.T) {
 		{Role: "user", Content: "Summarize the results."},
 	}
 
-	got, err := renderer.Render(msgs, qwen35MathTools(), nil)
+	got, err := renderer.Render(msgs, qwen35MathTools(), &api.ThinkValue{Value: true})
 	if err != nil {
 		t.Fatalf("render failed: %v", err)
 	}
@@ -215,7 +215,7 @@ func TestQwen35RendererInterleavedThinkingAndTools(t *testing.T) {
 		{Role: "tool", Content: "5"},
 	}
 
-	got, err := renderer.Render(msgs, qwen35WeatherUVTools(), nil)
+	got, err := renderer.Render(msgs, qwen35WeatherUVTools(), &api.ThinkValue{Value: true})
 	if err != nil {
 		t.Fatalf("render failed: %v", err)
 	}
@@ -272,7 +272,7 @@ func TestQwen35RendererAssistantPrefillWithThinking(t *testing.T) {
 		},
 	}
 
-	got, err := renderer.Render(msgs, nil, nil)
+	got, err := renderer.Render(msgs, nil, &api.ThinkValue{Value: true})
 	if err != nil {
 		t.Fatalf("render failed: %v", err)
 	}

@@ -59,9 +59,6 @@ func (p *Qwen35Parser) Init(tools []api.Tool, lastMessage *api.Message, thinkVal
 	p.toolParser.Init(tools, nil, nil)
 
 	thinkingEnabled := thinkValue != nil && thinkValue.Bool()
-	if thinkValue == nil {
-		thinkingEnabled = true
-	}
 
 	assistantPrefill := lastMessage != nil && lastMessage.Role == "assistant" && lastMessage.Content != ""
 	if thinkingEnabled && !assistantPrefill {

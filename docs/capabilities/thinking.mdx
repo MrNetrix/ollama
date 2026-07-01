@@ -16,7 +16,7 @@ Use this capability to audit model steps, animate the model *thinking* in a UI, 
 
 ## Enable thinking in API calls
 
-Set the `think` field on chat or generate requests. Most models accept booleans (`true`/`false`) or levels (`low`, `medium`, `high`, `max`), where `max` requests the highest thinking level.
+Thinking is disabled by default. Set the `think` field on chat or generate requests to enable it. Most models accept booleans (`true`/`false`) or levels (`low`, `medium`, `high`, `max`), where `max` requests the highest thinking level.
 
 GPT-OSS instead expects one of `low`, `medium`, or `high` to tune the trace length.
 
@@ -145,7 +145,7 @@ Thinking streams interleave reasoning tokens before answer tokens. Detect the fi
 ## CLI quick reference
 
 - Enable thinking for a single run: `ollama run deepseek-r1 --think "Where should I visit in Lisbon?"`
-- Disable thinking: `ollama run deepseek-r1 --think=false "Summarize this article"`
+- Explicitly disable thinking: `ollama run deepseek-r1 --think=false "Summarize this article"`
 - Hide the trace while still using a thinking model: `ollama run deepseek-r1 --hidethinking "Is 9.9 bigger or 9.11?"`
 - Inside interactive sessions, toggle with `/set think` or `/set nothink`.
 - GPT-OSS only accepts levels: `ollama run gpt-oss --think=low "Draft a headline"` (replace `low` with `medium` or `high` as needed).

@@ -324,7 +324,7 @@ Speak poetry after the first sentence.</think><think>Speak poetry after the seco
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rendered, err := (&Qwen3VLRenderer{isThinking: true}).Render(tt.msgs, tt.tools, nil)
+			rendered, err := (&Qwen3VLRenderer{isThinking: true}).Render(tt.msgs, tt.tools, &api.ThinkValue{Value: true})
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -381,8 +381,8 @@ func TestQwen3VLRendererThinkOverride(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(renderThinking, "<|im_start|>assistant\n<think>\n") {
-		t.Fatalf("expected default thinking renderer to emit <think>, got:\n%s", renderThinking)
+	if strings.Contains(renderThinking, "<think>") {
+		t.Fatalf("expected default thinking renderer to omit <think>, got:\n%s", renderThinking)
 	}
 
 	renderNonThinking, err := (&Qwen3VLRenderer{isThinking: true}).Render(msgs, nil, &api.ThinkValue{Value: false})
